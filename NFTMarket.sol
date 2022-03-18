@@ -13,10 +13,10 @@ contract NFTMarket is ReentrancyGuard {
   Counters.Counter private _itemsSold;
 
   address payable owner;
-  uint256 listingPrice = 0.001 ether;       // price to list, to be discussed later  
+  uint256 listingPrice = 0.001 ether;       
 
   constructor() {
-    owner = payable(msg.sender);  // this is the address that deploys the contract => AAK
+    owner = payable(msg.sender);  
   }
 
   struct MarketItem {
@@ -29,7 +29,7 @@ contract NFTMarket is ReentrancyGuard {
     bool sold;
   }
 
-  /* this mapping will allow us to get values associated with an item ID */
+  
   mapping(uint256 => MarketItem) private idToMarketItem;
 
   event MarketItemCreated (
@@ -42,14 +42,12 @@ contract NFTMarket is ReentrancyGuard {
     bool sold
   );
 
-  /* Returns the listing price of the contract */
+  
   function getListingPrice() public view returns (uint256) {
     return listingPrice;
   }
   
-  /* Places an item for sale on the marketplace */
-  /* Maybe we need to discuss how this item will be sent over the other party */
-  /* Maybe instead of the item itself user1 could just send a link */
+  
   function createMarketItem(
     address nftContract,
     uint256 tokenId,
@@ -66,7 +64,7 @@ contract NFTMarket is ReentrancyGuard {
       nftContract,
       tokenId,
       payable(msg.sender),
-      payable(address(0)),   // nobody owns the item yet, bacause it's for sale 
+      payable(address(0)),   
       price,
       false
     );
@@ -84,8 +82,7 @@ contract NFTMarket is ReentrancyGuard {
     );
   }
 
-  /* Creates the sale of a marketplace item */
-  /* Transfers ownership of the item, as well as funds between parties */
+  
   function createMarketSale(
     address nftContract,
     uint256 itemId
@@ -102,9 +99,7 @@ contract NFTMarket is ReentrancyGuard {
     payable(owner).transfer(listingPrice);
   }
 
-  /* Returns all unsold market items */
-  /* We might not need it, it depends what kind of features we want */
-  /* But it could be useful in the future */
+  
   function fetchMarketItems() public view returns (MarketItem[] memory) {
     uint itemCount = _itemIds.current();
     uint unsoldItemCount = _itemIds.current() - _itemsSold.current();
@@ -124,8 +119,7 @@ contract NFTMarket is ReentrancyGuard {
     return items;
   }
 
-  /* Returns only items that a user has purchased */
-  /* This will be useful to show the items (contracts history) of one account */
+  
   function fetchMyNFTs() public view returns (MarketItem[] memory) {
     uint totalItemCount = _itemIds.current();
     uint itemCount = 0;
@@ -149,8 +143,7 @@ contract NFTMarket is ReentrancyGuard {
     return items;
   }
 
-  /* Returns only items a user has created */
-  /* Important when we create a user's portfolio to show their contracts */
+ 
   function fetchItemsCreated() public view returns (MarketItem[] memory) {
     uint totalItemCount = _itemIds.current();
     uint itemCount = 0;
